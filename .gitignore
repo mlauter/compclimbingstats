@@ -1,6 +1,14 @@
-__pycache__
+# Repo specific
 data/*
+.env
+
+# Python
+__pycache__
+.ipynb_checkpoints
+.venv
+
+# Editors
 \#*
 .#*
 .DS_Store
-.ipynb_checkpoints
+.vscode
