@@ -5,7 +5,6 @@ from pathlib import Path
 
 from dotenv import dotenv_values
 import requests
-import IPython
 
 DEFAULT_MIN_YEAR = 2012
 DISCIPLINES = ["lead", "speed", "boulder", "combined", "boulder&lead"]
@@ -88,7 +87,7 @@ class Extractor:
 
         filename = f"{metadata['season']}_{metadata['loc']}_{metadata['discipline']}_{metadata['category']}_{round_name}.json"
         with open(os.path.join(self.outdir, filename), 'w', encoding='utf8') as f:
-            json.dump(result_json, f)
+            json.dump(result_json, f, ensure_ascii=False)
 
     def __v1_api_request(self, path: str):
         """Request a resource from the ifsc results api"""
