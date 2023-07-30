@@ -7,6 +7,9 @@ name = "pypi"
 python-dotenv = "*"
 requests = "*"
 jupyterlab = "*"
+matplotlib = "*"
+pandas = "*"
+seaborn = "*"
 
 [dev-packages]
 pylint = "*"
