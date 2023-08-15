@@ -1,0 +1,3 @@
+#!/bin/bash
+
+jq -r --arg DISCIPLINE "$2" --arg CATEGORY "$3" '["discipline","category","athlete_id","name","rank","score"], (.ranking[] | [$DISCIPLINE, $CATEGORY, .athlete_id, .name, .rank, .score]) | @csv' < "$1"

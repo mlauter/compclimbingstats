@@ -1,0 +1,28 @@
+#!/bin/bash
+
+INFILE="$1"
+BASENAME="$(basename -- "${INFILE%.json}")"
+
+IFS=_ read -r YEAR LOCATION CATEGORY STAGE <<< "$BASENAME"
+
+jq -r --arg YEAR "$YEAR" \
+  --arg LOCATION "$LOCATION" \
+  --arg CATEGORY "$CATEGORY" \
+  --arg STAGE "$STAGE" '
+  ["event_id", "year", "location","category", "stage", "athlete_id","name","combined_rank","combined_score","boulder_rank","boulder_score","lead_rank","lead_score"],
+  (
+    .event_id as $event_id
+    | .ranking[]
+    | [
+      $event_id, $YEAR, $LOCATION, $CATEGORY, $STAGE, .athlete_id, .name, .rank, .score,
+      (.combined_stages[] | select(.stage_name=="Boulder") | [.stage_rank,.stage_score] | flatten[]),
+      (.combined_stages[] | select(.stage_name=="Lead") | [.stage_rank,.stage_score] | flatten[])
+      ])
+  | @csv' < "$INFILE"
+
+
+# And after
+# for f in $(find data/combined -type f -name "*.json")
+# do
+# ./src/transform/combined_jsontocsv $f > "data/combined/$(basename -- ${f%.json}).csv"
+# done
