@@ -1,3 +1,18 @@
 #!/bin/bash
 
-jq -r --arg DISCIPLINE "$2" --arg CATEGORY "$3" '["discipline","category","athlete_id","name","rank","score"], (.ranking[] | [$DISCIPLINE, $CATEGORY, .athlete_id, .name, .rank, .score]) | @csv' < "$1"
+INFILE="$1"
+BASENAME="$(basename -- "${INFILE%.json}")"
+
+IFS=_ read -r CATEGORY DISCIPLINE <<< "$BASENAME"
+
+jq -r --arg DISCIPLINE "$DISCIPLINE" \
+  --arg CATEGORY "$CATEGORY" \
+  '
+  ["discipline","category","athlete_id","name","rank","score","bern_pts"],
+  (
+    .ranking[]
+    | [
+        $DISCIPLINE, $CATEGORY, .athlete_id, .name, .rank, .score,
+        (.score_breakdown[] | select((.event_id == 1301) and (.discipline_kind == $DISCIPLINE)) | .gained_pts)
+      ]
+  ) | @csv' < "$1"
