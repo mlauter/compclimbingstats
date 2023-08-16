@@ -10,6 +10,8 @@ jupyterlab = "*"
 matplotlib = "*"
 pandas = "*"
 seaborn = "*"
+scipy = "*"
+rbo = "*"
 
 [dev-packages]
 pylint = "*"
